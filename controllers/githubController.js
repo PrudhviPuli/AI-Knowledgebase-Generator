@@ -20,7 +20,7 @@ export const downloadController = (req, res) => {
 
   exec(`git clone ${repoUrl} ${destFolder}`, (err) => {
     if (err){
-        return res.status(500).json({ message: "Endpoint not found" })
+        return res.status(500).json({ message: err.message })
     }
     return res.status(200).json({ message: `Downloaded ${repoName}` })
   })
