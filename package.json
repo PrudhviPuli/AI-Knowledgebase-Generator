@@ -17,7 +17,13 @@
   },
   "homepage": "https://github.com/PrudhviPuli/AI-Knowledgebase-Generator#readme",
   "dependencies": {
-    "express": "^5.2.1"
+    "@langchain/core": "^1.1.7",
+    "@langchain/openai": "^1.2.0",
+    "@langchain/textsplitters": "^1.0.1",
+    "@supabase/supabase-js": "^2.89.0",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "langchain": "^1.2.2"
   },
   "devDependencies": {
     "@tsconfig/node22": "^22.0.5",
