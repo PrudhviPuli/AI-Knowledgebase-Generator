@@ -14,3 +14,16 @@
     gap: 25px;
     margin: 20px 30px 0 0;
 }
+
+#user{
+    font-size: 30px;
+    margin-right: 20px;
+}
+
+#logout{
+    border: solid white 2px;
+    height: 20px;
+    width: 55px;
+    text-align: center;
+    margin-top: 10px;
+}

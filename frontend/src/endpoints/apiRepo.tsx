@@ -4,12 +4,15 @@ export default async function ApiRepo(event: React.FormEvent<HTMLFormElement>){
     
     event.preventDefault();
     const formData: FormData = new FormData(event.currentTarget)
-    const {repolink} = Object.fromEntries(formData.entries())
+    const {repolink} = Object.fromEntries(formData.entries()) as {repolink: string}
 
     // console.log(repolink)
 
+    const url = new URL("http://localhost:8000/download-repo");
+    url.searchParams.append("repolink", repolink);
+
     //sending over the repo link
-    const response = await fetch(`whateverlinkweuse`, {
+    const response = await fetch(url.toString(), {
         headers: {'Authorization': `Bearer ${getToken()}` || ""}, //authentication
         credentials: 'include',
         body: JSON.stringify({repolink}) //sent it here

@@ -4,7 +4,7 @@ import getToken from "../utils/auth";
 export default async function isLoggedIn(){
 
     try{
-        const response = await fetch('/me-endpoint-link', {
+        const response = await fetch('http://localhost:8000/me', {
             headers: {'Authorization': `Bearer ${getToken()}` || ""},
             credentials: 'include'
         })
@@ -12,7 +12,8 @@ export default async function isLoggedIn(){
             throw new Error('HTTP Error on IsLoggedIn')
         }
 
-        // const result = await response.json();
+        const result = await response.json();
+        // console.log(result)
 
         return true;
     }

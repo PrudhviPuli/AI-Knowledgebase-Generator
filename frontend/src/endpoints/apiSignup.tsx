@@ -12,10 +12,9 @@ export default async function ApiSignup(event: React.FormEvent<HTMLFormElement>,
         alert("Passwords do not match!");
         return; // stop execution
       }
-      
     
       try {
-        const response = await fetch('renderlink', {
+        const response = await fetch('http://localhost:8000/signup', {
           method: 'POST',
           headers: {
             "Content-Type": "application/json"
