@@ -7,7 +7,7 @@ export default function RepoUpload(){
     //grabbing the knowledgebase data, setting it to state
     const [data, setData] = useState<any>(null)
     function handleSubmit(event: React.FormEvent<HTMLFormElement>){
-        setData(ApiRepo(event))
+        ApiRepo(event);
     }
 
     return(

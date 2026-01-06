@@ -35,7 +35,7 @@ export default async function testController(){
         new StringOutputParser()
     ])
 
-    const response = await chain.invoke(`What language is this code written in?`);
+    const response = await chain.invoke(`What is the primary use of this codebase?`);
 
     console.log(response);
 }

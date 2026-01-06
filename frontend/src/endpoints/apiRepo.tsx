@@ -6,27 +6,26 @@ export default async function ApiRepo(event: React.FormEvent<HTMLFormElement>){
     const formData: FormData = new FormData(event.currentTarget)
     const {repolink} = Object.fromEntries(formData.entries()) as {repolink: string}
 
-    // console.log(repolink)
-
     const url = new URL("http://localhost:8000/download-repo");
     url.searchParams.append("repolink", repolink);
 
     //sending over the repo link
+    // console.log(url);
     const response = await fetch(url.toString(), {
-        headers: {'Authorization': `Bearer ${getToken()}` || ""}, //authentication
+        method: "GET",
+        // headers: {'Authorization': `Bearer ${getToken()}` || ""}, //authentication
         credentials: 'include',
-        body: JSON.stringify({repolink}) //sent it here
     })
 
-    if (response.status == 401){
-        //token does not match in the backend, sends 401 
-        return {error: "UNAUTHORIZED"}
-    }
+    // if (response.status == 401){
+    //     //token does not match in the backend, sends 401 
+    //     return {error: "UNAUTHORIZED"}
+    // }
 
-    if (response.status == 403) {
-        //if the token is expired the backend will send a 403
-        return {error: "TOKEN_EXPIRED"}
-    }
+    // if (response.status == 403) {
+    //     //if the token is expired the backend will send a 403
+    //     return {error: "TOKEN_EXPIRED"}
+    // }
 
     if (!response.ok){
         //any server error
@@ -35,6 +34,7 @@ export default async function ApiRepo(event: React.FormEvent<HTMLFormElement>){
     
     //awaiting the AI Knowledgebase here
     const result = await response.json()
+    console.log(result)
     return result;
     
 }
