@@ -2,6 +2,8 @@ import express from "express";
 import type {Express,Request,Response} from "express";
 import { githubRouter } from "./routes/githubRouter.js";
 import { authRouter } from "./routes/authRoutes.js";
+import { llmRouter } from "./routes/llmRoutes.js";
+import testController from "./controllers/llmController.js";
 import cors from 'cors'
  
 const app : Express = express();
@@ -15,6 +17,8 @@ app.use(cors({
 app.use(express.json());
 app.use('/download-repo',githubRouter);
 app.use('/', authRouter)
+testController();
+app.use('/', llmRouter)
 
 app.use((req:Request, res:Response):void => {
   res.status(404).json({ message: "Endpoint not found" });
