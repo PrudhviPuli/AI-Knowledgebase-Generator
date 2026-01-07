@@ -17,7 +17,7 @@ app.use(cors({
 app.use(express.json());
 app.use('/download-repo',githubRouter);
 app.use('/', authRouter)
-// testController();
+testController();
 app.use('/', llmRouter)
 
 app.use((req:Request, res:Response):void => {

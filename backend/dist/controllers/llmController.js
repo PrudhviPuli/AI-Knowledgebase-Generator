@@ -13,12 +13,27 @@ export default async function testController() {
     const openAIApiKey = process.env.OPEN_API_KEY;
     const llm = new ChatOpenAI({ openAIApiKey });
     const testingTemplate = `You are a Senior Software Engineer
-                            Using the following code Context, give us information based on what is asked.
+                            Using the following code Context, give us an onboarding guide in the following
+                            format.
 
                             Context:
                             {context}
                             
-                            Information: `;
+                            Introduction:
+                                Short Paragraph introducing users to the codebase. Gives the name of the codebase,
+                                what tech stacks we are using, purpose of the codebase, goal of the codebase
+                                
+                            Explanation: 
+                                Short paragraph that goes more in depth of what the codebase does, the problem it 
+                                is solving perhaps, what it does, main features of the code, main uses such as mainly 
+                                using AI to answer questions, how the code connects together overall(frontend does this,
+                                backend does that, techstacks)
+                            
+                            Environment Setup:
+                                Instructions for setting up the codebase for your own use. How to install, clone,
+                                dependencies, packages, starting it up for personal use.
+
+`;
     const testPrompt = PromptTemplate.fromTemplate(testingTemplate);
     const chain = RunnableSequence.from([
         {
@@ -28,6 +43,6 @@ export default async function testController() {
         llm,
         new StringOutputParser()
     ]);
-    const response = await chain.invoke(`What is the primary use of this codebase?`);
+    const response = await chain.invoke(`Please generate me an onboarding guide for the codebase`);
     console.log(response);
 }
