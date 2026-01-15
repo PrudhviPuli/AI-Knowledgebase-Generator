@@ -1,6 +1,6 @@
 import "../css/signup.css"
 import ApiSignup from "../endpoints/apiSignup"
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 export default function Signup(){
     const navigate = useNavigate();
@@ -9,7 +9,10 @@ export default function Signup(){
         <>
         <h1 id="signup-title">SignUp</h1>
         <div className='signup-container'>
-            <form action="" className="signup-form" onSubmit={(e) => ApiSignup(e, navigate)}>
+            <form action="" className="signup-form" onSubmit={(e) => {
+                e.preventDefault();
+                ApiSignup(e, navigate)
+                }}>
                 <div>
                     <label htmlFor="name">Name</label><br />
                     <input type="text" id="name" name="name" required/>

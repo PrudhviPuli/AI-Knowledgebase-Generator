@@ -3,7 +3,10 @@ import type { NavigateFunction } from "react-router";
 //Api endpoint for logging in
 //Post Request
 
-export default async function ApiLogin(event: React.FormEvent<HTMLFormElement>, navigate: NavigateFunction){
+export default async function ApiLogin(event: React.FormEvent<HTMLFormElement>, navigate: NavigateFunction, props: {
+    setLoginStatus: React.Dispatch<React.SetStateAction<boolean>>;
+    setUser: React.Dispatch<React.SetStateAction<string>>;
+  }){
     const formData: FormData = new FormData(event.currentTarget)
     const {email, password} = Object.fromEntries(formData.entries())
 
@@ -33,6 +36,8 @@ export default async function ApiLogin(event: React.FormEvent<HTMLFormElement>, 
     //we can use this name and token for the frontend for authentication
     localStorage.setItem('user', result.name)
     localStorage.setItem('token', result.token)
+    props.setUser(result.name);
+    props.setLoginStatus(true);
     navigate('/')
 
     }

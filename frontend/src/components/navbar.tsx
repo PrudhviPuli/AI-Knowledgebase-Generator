@@ -1,7 +1,6 @@
 import "../css/navbar.css"
 import {Link, Outlet} from 'react-router-dom'
 import logout from "../utils/logout";
-import { useState, useEffect } from "react";
 
 type NavbarProps = {
     loginStatus: boolean;
@@ -10,12 +9,11 @@ type NavbarProps = {
     setUser: Function;
   };
 
-export default function Navbar({loginStatus, setLoginStatus, user, setUser} : NavbarProps){
+export default function Navbar({loginStatus, setLoginStatus, user} : NavbarProps){
 
     function handleLogout(){
         logout();
         setLoginStatus(false);
-        setUser("");
     }
 
 

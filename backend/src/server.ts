@@ -3,8 +3,10 @@ import type {Express,Request,Response} from "express";
 import { githubRouter } from "./routes/githubRouter.js";
 import { authRouter } from "./routes/authRoutes.js";
 import { llmRouter } from "./routes/llmRoutes.js";
-import testController from "./controllers/llmController.js";
+import test from "./controllers/test.js";
 import cors from 'cors'
+import diagramController from "./controllers/diagramController.js";
+import onboardingController from "./controllers/onboardingController.js";
  
 const app : Express = express();
 const PORT : number = 8000;
@@ -17,7 +19,10 @@ app.use(cors({
 app.use(express.json());
 app.use('/download-repo',githubRouter);
 app.use('/', authRouter)
-testController();
+// testController();
+// test();
+// diagramController();
+// onboardingController();
 app.use('/', llmRouter)
 
 app.use((req:Request, res:Response):void => {

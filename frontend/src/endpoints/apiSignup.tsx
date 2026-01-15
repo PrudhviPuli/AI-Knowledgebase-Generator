@@ -8,6 +8,7 @@ export default async function ApiSignup(event: React.FormEvent<HTMLFormElement>,
     const {name, email, password, confirmPassword} = Object.fromEntries(formData.entries())
     const signUpData = {name, email, password};
 
+
     if (password !== confirmPassword) {
         alert("Passwords do not match!");
         return; // stop execution
@@ -29,7 +30,7 @@ export default async function ApiSignup(event: React.FormEvent<HTMLFormElement>,
         
         // navigate to main page
         // router.push('/login')
-        navigate('/')
+        navigate('/login');
   
       }
       catch(e){

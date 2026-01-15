@@ -11,7 +11,7 @@ const __filename:string = fileURLToPath(import.meta.url)
 const __dirname:string = path.dirname(__filename)
 dotenv.config({path: path.resolve(__dirname, '../../.env')});
 
-export default async function testController(){
+export default async function onboardingController(){
     const openAIApiKey = process.env.OPEN_API_KEY;
 
     const llm = new ChatOpenAI({ openAIApiKey });
@@ -50,6 +50,7 @@ export default async function testController(){
         new StringOutputParser()
     ])
 
+    //The onboarding guide
     const response = await chain.invoke(`Please generate me an onboarding guide for the codebase`);
 
     console.log(response);

@@ -12,6 +12,7 @@ function App() {
   const [loginStatus, setLoginStatus] = useState<boolean>(false);
   const [user, setUser] = useState<string>("")
 
+  //checks if logged in and keeps user logged in
   useEffect( () => {
     async function loggedIn(){
       const result = await isLoggedIn();
@@ -39,7 +40,7 @@ function App() {
         />}>
           <Route path='/' element={<FrontPage />} />
           <Route path='/signup' element={<Signup />}/>
-          <Route path='/login' element={<Login />}/>
+          <Route path='/login' element={<Login setLoginStatus={setLoginStatus} setUser={setUser}/>}/>
         </Route>
       </Routes>
     </>
