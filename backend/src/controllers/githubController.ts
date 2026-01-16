@@ -45,7 +45,12 @@ function getFilePath(root: string): string[] {
           }
         } else if (entry.isFile()) {
           const ext = path.extname(entry.name).toLowerCase();
-  
+
+            // Skip package-lock.json files
+            if (entry.name === "package-lock.json") {
+              continue;
+            }
+
             if(ALLOW_EXT.has(ext) || entry.name === "LICENSE")
             {
                 result.push(fullPath);
