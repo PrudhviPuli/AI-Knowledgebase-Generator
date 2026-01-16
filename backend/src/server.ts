@@ -7,6 +7,8 @@ import test from "./controllers/test.js";
 import cors from 'cors'
 import diagramController from "./controllers/diagramController.js";
 import onboardingController from "./controllers/onboardingController.js";
+import architectureSummaryController from "./controllers/architectureSummaryController.js";
+import apiDocsController from "./controllers/apiDocsController.js";
  
 const app : Express = express();
 const PORT : number = 8000;
@@ -23,6 +25,8 @@ app.use('/', authRouter)
 // test();
 // diagramController();
 // onboardingController();
+// architectureSummaryController();
+apiDocsController();
 app.use('/', llmRouter)
 
 app.use((req:Request, res:Response):void => {

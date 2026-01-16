@@ -187,7 +187,7 @@ export const downloadController = (req: Request, res: Response) => {
     try {
       const sbApiKey = process.env.SUPABASE_API_KEY!;
       const sbUrl = process.env.SUPABASE_URL_LC_CHATBOT!;
-      const openAIApiKey = process.env.OPENAI_API_KEY!;
+      const openAIApiKey = process.env.OPEN_API_KEY!;
       if (!sbApiKey || !sbUrl || !openAIApiKey) {
         return res.status(500).json({ message: "Missing env vars (SUPABASE_API_KEY, SUPABASE_URL_LC_CHATBOT, OPENAI_API_KEY)" });
       }
