@@ -1,8 +1,8 @@
-import getToken from "../utils/auth"
 
 export default async function ApiRepo(event: React.FormEvent<HTMLFormElement>){
-    
+
     event.preventDefault();
+    
     const formData: FormData = new FormData(event.currentTarget)
     const {repolink} = Object.fromEntries(formData.entries()) as {repolink: string}
 
@@ -10,7 +10,7 @@ export default async function ApiRepo(event: React.FormEvent<HTMLFormElement>){
     url.searchParams.append("repolink", repolink);
 
     //sending over the repo link
-    // console.log(url);
+    // console.log(url.toString());
     const response = await fetch(url.toString(), {
         method: "GET",
         // headers: {'Authorization': `Bearer ${getToken()}` || ""}, //authentication

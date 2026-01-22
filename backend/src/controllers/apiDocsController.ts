@@ -6,12 +6,13 @@ import { fileURLToPath } from "url";
 import { retriever } from "../database/retriever.js";
 import { RunnableSequence } from "@langchain/core/runnables";
 import { StringOutputParser } from "@langchain/core/output_parsers";
+import {Request, Response} from 'express'
 
 const __filename:string = fileURLToPath(import.meta.url)
 const __dirname:string = path.dirname(__filename)
 dotenv.config({path: path.resolve(__dirname, '../../.env')});
 
-export default async function apiDocsController(){
+export default async function apiDocsController(req: Request, res: Response){
     const openAIApiKey = process.env.OPEN_API_KEY;
 
     const llm = new ChatOpenAI({ openAIApiKey });
@@ -138,7 +139,8 @@ export default async function apiDocsController(){
     // The API documentation
     const response = await chain.invoke(`Please generate me comprehensive API documentation for the codebase`);
 
-    console.log(response);
-    return response;
+    console.log("API Docs Controller Here")
+
+    res.status(200).json({apidocs: response})
 }
 

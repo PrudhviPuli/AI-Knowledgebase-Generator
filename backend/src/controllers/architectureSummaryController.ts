@@ -6,12 +6,13 @@ import { fileURLToPath } from "url";
 import { retriever } from "../database/retriever.js";
 import { RunnableSequence } from "@langchain/core/runnables";
 import { StringOutputParser } from "@langchain/core/output_parsers";
+import {Request, Response} from 'express'
 
 const __filename:string = fileURLToPath(import.meta.url)
 const __dirname:string = path.dirname(__filename)
 dotenv.config({path: path.resolve(__dirname, '../../.env')});
 
-export default async function architectureSummaryController(){
+export default async function architectureSummaryController(req: Request, res: Response){
     const openAIApiKey = process.env.OPEN_API_KEY;
 
     const llm = new ChatOpenAI({ openAIApiKey });
@@ -86,7 +87,8 @@ export default async function architectureSummaryController(){
     // The architecture summary
     const response = await chain.invoke(`Please generate me a comprehensive architecture summary for the codebase`);
 
-    console.log(response);
-    return response;
+    console.log("Architechture Summary Controller Here")
+    
+    res.status(200).json({architectureSummary: response});
 }
 

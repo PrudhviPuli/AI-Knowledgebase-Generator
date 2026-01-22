@@ -8,12 +8,13 @@ import { RunnableSequence } from "@langchain/core/runnables";
 import { StringOutputParser } from "@langchain/core/output_parsers";
 import { OpenAI } from "openai";
 import fs from 'fs'
+import {Request, Response} from 'express'
 
 const __filename:string = fileURLToPath(import.meta.url)
 const __dirname:string = path.dirname(__filename)
 dotenv.config({path: path.resolve(__dirname, '../../.env')});
 
-export default async function diagramController(){
+export default async function diagramController(req: Request, res: Response){
     const openAIApiKey = process.env.OPEN_API_KEY;
 
     const llm = new ChatOpenAI({ openAIApiKey });
@@ -83,9 +84,14 @@ export default async function diagramController(){
         throw new Error("Image base64 data missing");
     }
 
-    const image_bytes = Buffer.from(image_base64, "base64");
-    fs.writeFileSync("diagram.png", image_bytes);
+    console.log("Diagram Controller Here")
+
+    // const image_bytes = Buffer.from(image_base64, "base64");
+    // fs.writeFileSync("diagram.png", image_bytes);
     //this is where the image is generated, writing it to directory for now
+
+    res.status(200).json({diagram: image_base64})
+    
 
 }
 

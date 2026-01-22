@@ -3,7 +3,7 @@ import path from "path";
 import crypto from "crypto";
 import { exec } from "child_process";
 import { fileURLToPath } from "url";
-import type { Request, Response } from "express";
+import type { Request, Response, NextFunction } from "express";
 
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 import { createClient } from "@supabase/supabase-js";
@@ -170,10 +170,10 @@ async function upsertToSupabase(params: {
   }
 }
 
-export const downloadController = (req: Request, res: Response) => {
+export const downloadController = (req: Request, res: Response, next: NextFunction) => {
   const repoUrl = req.query.repolink;
 
-  // console.log("")
+  // console.log(repoUrl)
 
   if (!repoUrl || typeof repoUrl !== "string") {
     return res.status(400).json({ message: "repo query param required" });
@@ -189,11 +189,14 @@ export const downloadController = (req: Request, res: Response) => {
   exec(`git clone ${repoUrl} ${destFolder}`, async (err) => {
     if (err) return res.status(500).json({ message: err.message });
 
+    // console.log("Got past first 500 error")
+
     try {
       const sbApiKey = process.env.SUPABASE_API_KEY!;
       const sbUrl = process.env.SUPABASE_URL_LC_CHATBOT!;
-      const openAIApiKey = process.env.OPEN_API_KEY!;
+      const openAIApiKey = process.env.OPENAI_API_KEY!;
       if (!sbApiKey || !sbUrl || !openAIApiKey) {
+
         return res.status(500).json({ message: "Missing env vars (SUPABASE_API_KEY, SUPABASE_URL_LC_CHATBOT, OPENAI_API_KEY)" });
       }
 
@@ -209,13 +212,15 @@ export const downloadController = (req: Request, res: Response) => {
         tableName: "documents",
       });
 
-      return res.status(200).json({
-        message: `Downloaded + indexed ${repoName}`,
-        repo_id: repoId,
-        chunks: docs.length,
-      });
+      // return res.status(200).json({
+      //   message: `Downloaded + indexed ${repoName}`,
+      //   repo_id: repoId,
+      //   chunks: docs.length,
+      // });
+      next();
     } catch (e: any) {
-      return res.status(500).json({ message: e?.message ?? "Indexing failed" });
+      // return res.status(500).json({ message: e?.message ?? "Indexing failed" });
+      next(err)
     }
   });
 };

@@ -5,9 +5,11 @@ import { useState, useEffect } from 'react'
 export default function RepoUpload(){
 
     //grabbing the knowledgebase data, setting it to state
-    const [data, setData] = useState<any>(null)
-    function handleSubmit(event: React.FormEvent<HTMLFormElement>){
-        ApiRepo(event);
+    const [data, setData] = useState<String>("")
+
+    async function handleSubmit(event: React.FormEvent<HTMLFormElement>){
+        const response = await ApiRepo(event);
+        // setData(response.diagram)
     }
 
     return(
@@ -17,7 +19,7 @@ export default function RepoUpload(){
                 <input type="text" id="input-field" placeholder="https://github.com/repository" name="repolink"/>
                 <button id="generate-button">Generate!</button>
             </form>
-            {/* {generate the data here } */}
+            {data && <img src={`data:image/png;base64,${data}`} />}
         </>
     )
 }

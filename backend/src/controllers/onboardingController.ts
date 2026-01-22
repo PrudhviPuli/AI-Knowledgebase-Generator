@@ -6,12 +6,16 @@ import { fileURLToPath } from "url";
 import { retriever } from "../database/retriever.js";
 import { RunnableSequence } from "@langchain/core/runnables";
 import { StringOutputParser } from "@langchain/core/output_parsers";
+import {Request, Response} from 'express'
 
 const __filename:string = fileURLToPath(import.meta.url)
 const __dirname:string = path.dirname(__filename)
 dotenv.config({path: path.resolve(__dirname, '../../.env')});
 
-export default async function onboardingController(){
+export default async function onboardingController(req: Request, res: Response){
+
+    console.log("GOT INTO ONBOARDING CONTROLLER BEGGINING")
+    
     const openAIApiKey = process.env.OPEN_API_KEY;
 
     const llm = new ChatOpenAI({ openAIApiKey });
@@ -53,7 +57,10 @@ export default async function onboardingController(){
     //The onboarding guide
     const response = await chain.invoke(`Please generate me an onboarding guide for the codebase`);
 
-    console.log(response);
+    // console.log(response);
+    console.log("Onboarding Controller Here")
+
+    res.status(200).json({onboarding: response})
 }
 
 
