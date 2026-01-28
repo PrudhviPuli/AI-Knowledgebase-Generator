@@ -12,9 +12,7 @@ const __filename:string = fileURLToPath(import.meta.url)
 const __dirname:string = path.dirname(__filename)
 dotenv.config({path: path.resolve(__dirname, '../../.env')});
 
-export default async function onboardingController(req: Request, res: Response){
-
-    console.log("GOT INTO ONBOARDING CONTROLLER BEGGINING")
+export default async function onboardingController(){
     
     const openAIApiKey = process.env.OPEN_API_KEY;
 
@@ -57,10 +55,10 @@ export default async function onboardingController(req: Request, res: Response){
     //The onboarding guide
     const response = await chain.invoke(`Please generate me an onboarding guide for the codebase`);
 
-    // console.log(response);
     console.log("Onboarding Controller Here")
 
-    res.status(200).json({onboarding: response})
+    // res.status(200).json({onboarding: response})
+    return {onboarding: response};
 }
 
 

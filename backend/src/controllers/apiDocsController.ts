@@ -6,13 +6,13 @@ import { fileURLToPath } from "url";
 import { retriever } from "../database/retriever.js";
 import { RunnableSequence } from "@langchain/core/runnables";
 import { StringOutputParser } from "@langchain/core/output_parsers";
-import {Request, Response} from 'express'
+
 
 const __filename:string = fileURLToPath(import.meta.url)
 const __dirname:string = path.dirname(__filename)
 dotenv.config({path: path.resolve(__dirname, '../../.env')});
 
-export default async function apiDocsController(req: Request, res: Response){
+export default async function apiDocsController(){
     const openAIApiKey = process.env.OPEN_API_KEY;
 
     const llm = new ChatOpenAI({ openAIApiKey });
@@ -141,6 +141,6 @@ export default async function apiDocsController(req: Request, res: Response){
 
     console.log("API Docs Controller Here")
 
-    res.status(200).json({apidocs: response})
+    return {apidocs: response}
 }
 

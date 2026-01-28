@@ -29,7 +29,7 @@ export default async function loginController(req: Request, res: Response) {
             const userIsValid = await bcrypt.compare(req.body.password, data[0].password)
             try{
                 if (userIsValid){
-                    const token = jwt.sign({id: data[0].id, name: data[0].name}, process.env.SECRET as Secret, {expiresIn: '1h'})
+                    const token = jwt.sign({id: data[0].id, name: data[0].name, user_id: data[0].user_id}, process.env.SECRET as Secret, {expiresIn: '1h'})
                     res.status(200).json({name: data[0].name, token: token})
                 }
                 else{

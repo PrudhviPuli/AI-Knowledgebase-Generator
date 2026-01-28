@@ -1,3 +1,4 @@
+import getToken from "../utils/auth";
 
 export default async function ApiRepo(event: React.FormEvent<HTMLFormElement>){
 
@@ -13,7 +14,7 @@ export default async function ApiRepo(event: React.FormEvent<HTMLFormElement>){
     // console.log(url.toString());
     const response = await fetch(url.toString(), {
         method: "GET",
-        // headers: {'Authorization': `Bearer ${getToken()}` || ""}, //authentication
+        headers: {'Authorization': `Bearer ${getToken()}` || ""}, //authentication
         credentials: 'include',
     })
 

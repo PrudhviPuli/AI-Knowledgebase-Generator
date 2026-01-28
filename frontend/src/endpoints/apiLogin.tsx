@@ -31,7 +31,6 @@ export default async function ApiLogin(event: React.FormEvent<HTMLFormElement>, 
     }
 
     const result = await response.json();
-    // console.log(result)
     //json that is returned should have a token and name
     //we can use this name and token for the frontend for authentication
     localStorage.setItem('user', result.name)

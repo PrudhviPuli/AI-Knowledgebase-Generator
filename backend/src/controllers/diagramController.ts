@@ -8,13 +8,13 @@ import { RunnableSequence } from "@langchain/core/runnables";
 import { StringOutputParser } from "@langchain/core/output_parsers";
 import { OpenAI } from "openai";
 import fs from 'fs'
-import {Request, Response} from 'express'
+
 
 const __filename:string = fileURLToPath(import.meta.url)
 const __dirname:string = path.dirname(__filename)
 dotenv.config({path: path.resolve(__dirname, '../../.env')});
 
-export default async function diagramController(req: Request, res: Response){
+export default async function diagramController(){
     const openAIApiKey = process.env.OPEN_API_KEY;
 
     const llm = new ChatOpenAI({ openAIApiKey });
@@ -33,6 +33,12 @@ export default async function diagramController(req: Request, res: Response){
                             - Arrows: black arrows that connect from one box and point to the next
                             - Color: Simple black text/boxes/lines, white background
                             - Font: basic default font
+                            - Layout: wide horizontal layout
+                            - Spacing: generous spacing between boxes
+                            - Avoid overlapping text or arrows
+                            - Ensure all labels are fully readable
+                            - Diagram should comfortably fit within a wide canvas
+
 
                             # Consistent Elements (MUST maintain across ALL images)
                             - Using Text for each main data
@@ -69,6 +75,7 @@ export default async function diagramController(req: Request, res: Response){
     const result = await openai.images.generate({
         model: "gpt-image-1",
         prompt,
+        size: "1792x1024"
     });
 
     console.log("Successfully Generated Image")
@@ -86,11 +93,12 @@ export default async function diagramController(req: Request, res: Response){
 
     console.log("Diagram Controller Here")
 
+    //THIS IS FOR TESTING
     // const image_bytes = Buffer.from(image_base64, "base64");
     // fs.writeFileSync("diagram.png", image_bytes);
     //this is where the image is generated, writing it to directory for now
 
-    res.status(200).json({diagram: image_base64})
+    return {diagram: image_base64};
     
 
 }

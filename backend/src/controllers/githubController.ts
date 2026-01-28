@@ -173,8 +173,9 @@ async function upsertToSupabase(params: {
 export const downloadController = (req: Request, res: Response, next: NextFunction) => {
   const repoUrl = req.query.repolink;
 
-  // console.log(repoUrl)
-
+  //HERE IS WHERE WE CAN GRAB THE USER_ID
+  //req.user.user_id -> THIS WILL EXIST IF LOGGED IN, WILL NOT EXIST IF LOGGED OUT
+  
   if (!repoUrl || typeof repoUrl !== "string") {
     return res.status(400).json({ message: "repo query param required" });
   }
@@ -196,13 +197,13 @@ export const downloadController = (req: Request, res: Response, next: NextFuncti
       const sbUrl = process.env.SUPABASE_URL_LC_CHATBOT!;
       const openAIApiKey = process.env.OPENAI_API_KEY!;
       if (!sbApiKey || !sbUrl || !openAIApiKey) {
-
         return res.status(500).json({ message: "Missing env vars (SUPABASE_API_KEY, SUPABASE_URL_LC_CHATBOT, OPENAI_API_KEY)" });
       }
 
       const repoId = sha256(repoUrl);
 
       const docs = await splitRepoToDocuments(destFolder, repoId);
+
 
       await upsertToSupabase({
         docs,
@@ -220,7 +221,8 @@ export const downloadController = (req: Request, res: Response, next: NextFuncti
       next();
     } catch (e: any) {
       // return res.status(500).json({ message: e?.message ?? "Indexing failed" });
-      next(err)
+      console.error("Indexing failed:", e);
+      next(e)
     }
   });
 };

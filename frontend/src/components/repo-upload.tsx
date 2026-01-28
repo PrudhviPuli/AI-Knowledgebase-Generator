@@ -9,8 +9,10 @@ export default function RepoUpload(){
 
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>){
         const response = await ApiRepo(event);
-        // setData(response.diagram)
+        setData(response.onboarding)
     }
+
+    //<img src={`data:image/png;base64,${data}`} THIS IS HOW WE SHOWCASE IMAGE
 
     return(
         <>
@@ -19,7 +21,7 @@ export default function RepoUpload(){
                 <input type="text" id="input-field" placeholder="https://github.com/repository" name="repolink"/>
                 <button id="generate-button">Generate!</button>
             </form>
-            {data && <img src={`data:image/png;base64,${data}`} />}
+            {data}
         </>
     )
 }
