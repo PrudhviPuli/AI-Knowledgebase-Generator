@@ -15,9 +15,9 @@ const __dirname:string = path.dirname(__filename)
 dotenv.config({path: path.resolve(__dirname, '../../.env')});
 
 export default async function diagramController(){
-    const openAIApiKey = process.env.OPEN_API_KEY;
+    const openAIApiKey = process.env.OPENAI_API_KEY;
 
-    const llm = new ChatOpenAI({ openAIApiKey });
+    const llm = new ChatOpenAI({ apiKey: openAIApiKey });
     const openai = new OpenAI({apiKey: openAIApiKey});
 
     const testingTemplate = `You are a Senior Software Engineer
@@ -70,35 +70,35 @@ export default async function diagramController(){
 
     const prompt = await chain.invoke(`Please generate me an architechture diagram for the codebase`);
 
+    console.log("GOT PAST MAIN LANGCHAIN PROMPT")
+
     // console.log(typeof prompt)
 
-    const result = await openai.images.generate({
-        model: "gpt-image-1",
-        prompt,
-        size: "1792x1024"
-    });
+    try{
+        const result = await openai.images.generate({
+            model: "gpt-image-1",
+            prompt,
+            size: "1024x1024"
+        });
 
-    console.log("Successfully Generated Image")
+        if (!result.data || result.data.length === 0) {
+            throw new Error("No image data returned from OpenAI");
+        }
+        
+        // Save the image to a file
+        const image_base64 = result.data[0].b64_json;
 
-    if (!result.data || result.data.length === 0) {
-        throw new Error("No image data returned from OpenAI");
+        if (!image_base64) {
+            throw new Error("Image base64 data missing");
+        }
+
+        console.log("Diagram Controller Here")
+
+        return {diagram: image_base64};
     }
-    
-    // Save the image to a file
-    const image_base64 = result.data[0].b64_json;
-
-    if (!image_base64) {
-        throw new Error("Image base64 data missing");
-    }
-
-    console.log("Diagram Controller Here")
-
-    //THIS IS FOR TESTING
-    // const image_bytes = Buffer.from(image_base64, "base64");
-    // fs.writeFileSync("diagram.png", image_bytes);
-    //this is where the image is generated, writing it to directory for now
-
-    return {diagram: image_base64};
+    catch(err){
+        console.error(err)
+    }    
     
 
 }

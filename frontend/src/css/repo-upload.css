@@ -15,3 +15,28 @@
     margin-top: 30px;
     width: 100px;
 }
+
+.data{
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    margin: 0 auto 0 auto;
+}
+
+h2{
+    margin-bottom: 0;
+}
+
+.data > h1{
+    margin-top: 100px;
+}
+
+ul{
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+#diagram{
+    width: 600px;
+    height: 400px;
+}
