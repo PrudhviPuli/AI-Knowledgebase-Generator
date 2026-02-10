@@ -128,8 +128,9 @@ async function upsertToSupabase(params: {
   supabaseKey: string;
   openAIApiKey: string;
   tableName: string;
+  userId?: string;
 }) {
-  const { docs, supabaseUrl, supabaseKey, openAIApiKey, tableName } = params;
+  const { docs, supabaseUrl, supabaseKey, openAIApiKey, tableName, userId } = params;
 
   const client = createClient(supabaseUrl, supabaseKey);
   const embeddings = new OpenAIEmbeddings({ openAIApiKey });
@@ -156,8 +157,9 @@ async function upsertToSupabase(params: {
         chunk_index,
         chunk_id,
         content: d.pageContent,
-        metadata: d.metadata,       
-        embedding: vectors[idx],   
+        metadata: d.metadata,
+        embedding: vectors[idx],
+        user_id: userId ?? null,
       };
     });
 
@@ -173,9 +175,8 @@ async function upsertToSupabase(params: {
 export const downloadController = (req: Request, res: Response, next: NextFunction) => {
   const repoUrl = req.query.repolink;
 
-  //HERE IS WHERE WE CAN GRAB THE USER_ID
-  //req.user.user_id -> THIS WILL EXIST IF LOGGED IN, WILL NOT EXIST IF LOGGED OUT
-  
+  const userId = req.user?.user_id;
+
   if (!repoUrl || typeof repoUrl !== "string") {
     return res.status(400).json({ message: "repo query param required" });
   }
@@ -211,13 +212,13 @@ export const downloadController = (req: Request, res: Response, next: NextFuncti
         supabaseKey: sbApiKey,
         openAIApiKey,
         tableName: "documents",
+        userId,
       });
 
-      // return res.status(200).json({
-      //   message: `Downloaded + indexed ${repoName}`,
-      //   repo_id: repoId,
-      //   chunks: docs.length,
-      // });
+      // Pass repoId and userId to the next handler (llmRouter)
+      res.locals.repoId = repoId;
+      res.locals.userId = userId ?? null;
+
       next();
     } catch (e: any) {
       // return res.status(500).json({ message: e?.message ?? "Indexing failed" });

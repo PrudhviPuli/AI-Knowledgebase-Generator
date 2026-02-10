@@ -92,6 +92,7 @@ export default async function diagramController(){
     }
 
     console.log("Diagram Controller Here")
+    console.log("Diagram Response: [base64 image, length =", image_base64.length, "]")
 
     //THIS IS FOR TESTING
     // const image_bytes = Buffer.from(image_base64, "base64");
