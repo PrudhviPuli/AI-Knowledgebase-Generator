@@ -165,6 +165,7 @@ export default async function apiDocsController(){
     const response = await chain.invoke(`Please generate me comprehensive API documentation for the codebase`);
 
     console.log("API Docs Controller Here")
+    console.log("API Docs Response:", response)
 
     return {apidocs: response}
 }
