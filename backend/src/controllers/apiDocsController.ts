@@ -3,7 +3,7 @@ import { PromptTemplate } from "@langchain/core/prompts";
 import dotenv from 'dotenv'
 import path from 'path'
 import { fileURLToPath } from "url";
-import { retriever } from "../database/retriever.js";
+import { BaseRetriever } from "@langchain/core/retrievers";
 import { RunnableSequence } from "@langchain/core/runnables";
 import { StringOutputParser } from "@langchain/core/output_parsers";
 
@@ -12,114 +12,139 @@ const __filename:string = fileURLToPath(import.meta.url)
 const __dirname:string = path.dirname(__filename)
 dotenv.config({path: path.resolve(__dirname, '../../.env')});
 
-export default async function apiDocsController(){
-    const openAIApiKey = process.env.OPEN_API_KEY;
+export default async function apiDocsController(retriever: BaseRetriever){
+    const openAIApiKey = process.env.OPENAI_API_KEY;
 
     const llm = new ChatOpenAI({ openAIApiKey });
 
     const apiDocsTemplate = `You are a Senior Software Engineer and Technical Writer.
                             Using the following code Context, generate comprehensive API documentation
-                            in the following format.
+                            in the following format. Below is how I have done it to the example, add html around surrounding parts that may need it
+                            as well. DO NOT WRAP THE ENTIRE THING AROUND AN HTML TAG, WE JUST NEED THE h2 AND P TAGS REALLY. Everything wrapped in * do 
+                            not include it in the final output, this is meant to represent instructions for generating.
 
                             Context:
                             {context}
                             
-                            API Documentation:
+                            <h1>API Documentation</h1>
+                            <h2>API Overview</h2>
+                                *Provide a brief overview of the API:*
+                                <ul>
+                                    <li>Base URL</li>
+                                    <li>Authentication method</li>
+                                    <li>API version (if applicable)</li>
+                                    <li>General conventions (request/response formats, error handling)</li>
+                                </ul>
                             
-                            # API Overview
-                                Provide a brief overview of the API:
-                                - Base URL
-                                - Authentication method
-                                - API version (if applicable)
-                                - General conventions (request/response formats, error handling)
+                            <h2>Authentication</h2>
+                                *Document the authentication mechanism:*
+                                <ul>
+                                    <li>How to authenticate requests</li>
+                                    <li>Token format and usage</li>
+                                    <li>Authentication endpoints (if any)</li>
+                                    <li>Example authentication flow</li>
+                                </ul>
                             
-                            # Authentication
-                                Document the authentication mechanism:
-                                - How to authenticate requests
-                                - Token format and usage
-                                - Authentication endpoints (if any)
-                                - Example authentication flow
+                            <h2>Endpoints</h2>
+                                *For each API endpoint, provide:*
+                                
+                                <b>Endpoint Name</b>
+                                
+                                <b>Description</b>
+                                    <p>Brief description of what this endpoint does</p>
+                                
+                                <b>HTTP Method & Path</b>
+                                    <p>\`[METHOD] /path/to/endpoint\`</p>
+                                
+                                <b>Request Headers</b>
+                                    *Required and optional headers:*
+                                    <ul>
+                                        <li>Content-Type</li>
+                                        <li>Authorization</li>
+                                        <li>Other custom headers<l/i>
+                                    </ul>
+                                
+                                <b>Request Parameters</b>
+                                    *Path parameters, query parameters, and request body:*
+                                    <ul>
+                                        <li>Parameter name</li>
+                                        <li>Type</li>
+                                        <li>Required/Optional</li>
+                                        <li>Description</li>
+                                        <li>Example values</li>
+                                    </ul>
+                                
+                                <b>Request Body (if applicable)</b>
+                                    *Schema and example(add newlines to format it like this):*
+                                    <p>
+                                        \`\`\`json
+                                        {{
+                                            "field1": "value1",
+                                            "field2": "value2"
+                                        }}
+                                        \`\`\`
+                                    </p>
+                                
+                                <b>Response</b>
+                                    *Success and error responses:*
+                                    <ul>
+                                        <li>Status codes</li>
+                                        <li>Response schema</li>
+                                        <li>Example responses</li>
+                                    </ul>
+                                
+                                <b>Example Request</b>
+                                    *add newlines if needed to give the example request as formated below*
+                                    <p>
+                                        \`\`\`bash
+                                        curl -X [METHOD] "https://api.example.com/endpoint" \\
+                                            -H "Authorization: Bearer token" \\
+                                            -H "Content-Type: application/json" \\
+                                            -d '{{"key": "value"}}'
+                                        \`\`\`
+                                    </p>
+                                
+                                <b>Example Response</b>
+                                    *add newlines if needed to give the example response as formated below*
+                                    <p>
+                                        \`\`\`json
+                                        {{
+                                            "status": "success",
+                                            "data": {{}}
+                                        }}
+                                        \`\`\`
+                                    </p>
+                                
+                                <b>Error Responses</b>
+                                    *Common error scenarios:*
+                                    <ul>
+                                        <li>Error codes</li>
+                                        <li>Error message formats</li>
+                                        <li>Troubleshooting tips</li>
+                                    </ul>
                             
-                            # Endpoints
-                                For each API endpoint, provide:
-                                
-                                ## [Endpoint Name]
-                                
-                                ### Description
-                                    Brief description of what this endpoint does
-                                
-                                ### HTTP Method & Path
-                                    \`[METHOD] /path/to/endpoint\`
-                                
-                                ### Request Headers
-                                    Required and optional headers:
-                                    - Content-Type
-                                    - Authorization
-                                    - Other custom headers
-                                
-                                ### Request Parameters
-                                    Path parameters, query parameters, and request body:
-                                    - Parameter name
-                                    - Type
-                                    - Required/Optional
-                                    - Description
-                                    - Example values
-                                
-                                ### Request Body (if applicable)
-                                    Schema and example:
-                                    \`\`\`json
-                                    {{
-                                        "field1": "value1",
-                                        "field2": "value2"
-                                    }}
-                                    \`\`\`
-                                
-                                ### Response
-                                    Success and error responses:
-                                    - Status codes
-                                    - Response schema
-                                    - Example responses
-                                
-                                ### Example Request
-                                    \`\`\`bash
-                                    curl -X [METHOD] "https://api.example.com/endpoint" \\
-                                        -H "Authorization: Bearer token" \\
-                                        -H "Content-Type: application/json" \\
-                                        -d '{{"key": "value"}}'
-                                    \`\`\`
-                                
-                                ### Example Response
-                                    \`\`\`json
-                                    {{
-                                        "status": "success",
-                                        "data": {{}}
-                                    }}
-                                    \`\`\`
-                                
-                                ### Error Responses
-                                    Common error scenarios:
-                                    - Error codes
-                                    - Error message formats
-                                    - Troubleshooting tips
+                            <h2>Error Handling</h2>
+                                *Document the error handling approach:*
+                                <ul>
+                                    <li>Standard error response format</li>
+                                    <li>HTTP status codes used</li>
+                                    <li>Error code reference</li>
+                                    <li>Common error scenarios<l/i>
+                                </ul>
                             
-                            # Error Handling
-                                Document the error handling approach:
-                                - Standard error response format
-                                - HTTP status codes used
-                                - Error code reference
-                                - Common error scenarios
+                            <h2>Rate Limiting</h2>
+                                *If applicable, document:*
+                                <ul>
+                                    <li>Rate limits</li>
+                                    <li>Rate limit headers</li>
+                                    <li>How to handle rate limit errors</li>
+                                </ul>
                             
-                            # Rate Limiting
-                                If applicable, document:
-                                - Rate limits
-                                - Rate limit headers
-                                - How to handle rate limit errors
-                            
-                            # Code Examples
-                                Provide code examples in common languages:
-                                - JavaScript/TypeScript
-                                - Python
-                                - cURL
+                            <h2>Code Examples</h2>
+                                *Provide code examples in common languages:*
+                                <p>
+                                    Any applicable coding language is applied here. Some code examples written here. 
+                                </p>
                             
                             Format the output in clear, well-structured markdown with proper code blocks and examples.
 

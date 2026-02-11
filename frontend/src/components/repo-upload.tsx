@@ -1,15 +1,20 @@
 import "../css/repo-upload.css"
 import ApiRepo from "../endpoints/apiRepo"
-import { useState, useEffect } from 'react'
+import ApiDiagram from "../endpoints/apiDiagram"
+import { useState } from 'react'
+import parse from 'html-react-parser'
 
 export default function RepoUpload(){
 
     //grabbing the knowledgebase data, setting it to state
-    const [data, setData] = useState<String>("")
+    const [data, setData] = useState<string>("")
+    const [imageData, setImageData] = useState<string>("")
 
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>){
         const response = await ApiRepo(event);
-        setData(response.onboarding)
+        setData(`<div className="data">` + response.summary + response.onboarding + response.apidocs + "</div>")
+        const diagram_response = await ApiDiagram();
+        // setImageData(diagram_response.diagram)
     }
 
     //<img src={`data:image/png;base64,${data}`} THIS IS HOW WE SHOWCASE IMAGE
@@ -21,7 +26,10 @@ export default function RepoUpload(){
                 <input type="text" id="input-field" placeholder="https://github.com/repository" name="repolink"/>
                 <button id="generate-button">Generate!</button>
             </form>
-            {data}
+            {<div>
+                {parse(data)}
+                { imageData && imageData !== "undefined" && <img src={`data:image/png;base64,${imageData}`} id="diagram" className="data"/>}
+            </div>}
         </>
     )
 }

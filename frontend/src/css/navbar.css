@@ -27,3 +27,11 @@
     text-align: center;
     margin-top: 10px;
 }
+
+#repos{
+    border: solid white 2px;
+    height: 20px;
+    width: 55px;
+    text-align: center;
+    margin-top: 10px;
+}

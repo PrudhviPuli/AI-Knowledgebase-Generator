@@ -4,21 +4,25 @@ import architectureSummaryController from '../controllers/architectureSummaryCon
 import diagramController from '../controllers/diagramController.js';
 import onboardingController from '../controllers/onboardingController.js';
 import supabase from '../database/supabase-client.js';
+import {vectorStore} from '../database/retriever.js'
 import { Router, Request, Response } from 'express'
 
 export const llmRouter: Router = express.Router();
 
-// llmRouter.get('/', apiDocsController);
-// llmRouter.get('/', architectureSummaryController);
-// llmRouter.get('/', onboardingController);
-// llmRouter.get('/', diagramController);
 llmRouter.get('/', async (req: Request, res: Response) => {
+    const repoID = res.locals.repoID;
+
+    const retriever = vectorStore.asRetriever({
+        filter: {
+            repo_id: repoID
+        }
+    })
 
     try{
-        const [summary, onboarding, apidocs] = await Promise.all([
-            architectureSummaryController(),
-            onboardingController(),
-            apiDocsController(),
+        const [summary, apidocs, onboarding] = await Promise.all([
+            architectureSummaryController(retriever),
+            apiDocsController(retriever),
+            onboardingController(retriever),
             // diagramController() - disabled for now
         ])
 
@@ -55,3 +59,21 @@ llmRouter.get('/', async (req: Request, res: Response) => {
 
 
 })
+
+llmRouter.get('/diagram', async (req: Request, res: Response) => {
+    const repoID = res.locals.repoID;
+
+    const retriever = vectorStore.asRetriever({
+        filter: {
+            repo_id: repoID
+        }
+    })
+
+    try{
+        const diagram = await diagramController(retriever);
+        res.status(200).json(diagram)
+    }
+    catch(err){
+        res.status(500).json({error: err})
+    }
+}) 

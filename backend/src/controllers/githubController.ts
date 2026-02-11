@@ -202,6 +202,7 @@ export const downloadController = (req: Request, res: Response, next: NextFuncti
       }
 
       const repoId = sha256(repoUrl);
+      res.locals.repoID = repoId;
 
       const docs = await splitRepoToDocuments(destFolder, repoId);
 

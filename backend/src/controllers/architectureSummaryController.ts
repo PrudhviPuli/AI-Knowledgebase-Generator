@@ -3,7 +3,8 @@ import { PromptTemplate } from "@langchain/core/prompts";
 import dotenv from 'dotenv'
 import path from 'path'
 import { fileURLToPath } from "url";
-import { retriever } from "../database/retriever.js";
+// import { retriever } from "../database/retriever.js";
+import { BaseRetriever } from "@langchain/core/retrievers";
 import { RunnableSequence } from "@langchain/core/runnables";
 import { StringOutputParser } from "@langchain/core/output_parsers";
 
@@ -11,62 +12,75 @@ const __filename:string = fileURLToPath(import.meta.url)
 const __dirname:string = path.dirname(__filename)
 dotenv.config({path: path.resolve(__dirname, '../../.env')});
 
-export default async function architectureSummaryController(){
-    const openAIApiKey = process.env.OPEN_API_KEY;
+export default async function architectureSummaryController(retriever: BaseRetriever){
+    const openAIApiKey = process.env.OPENAI_API_KEY;
 
     const llm = new ChatOpenAI({ openAIApiKey });
 
+    //FIX THIS TO BE SMALLER, ALSO FIX IT SO THAT IT DOESNT SAY (NOT SPECIFIED IN PROVIDED CONTEXT)
     const architectureTemplate = `You are a Senior Software Engineer and System Architect.
                                 Using the following code Context, generate a comprehensive architecture summary
-                                in the following format.
+                                in the following format. If you are missing context just do not list the information we are asking. 
+                                We also need html and newlines surrounding specific parts of the 
+                                summary. Below is how I have done it to the example, add html around surrounding parts that may need it
+                                as well. DO NOT WRAP THE ENTIRE THING AROUND AN HTML TAG, WE JUST NEED THE h2 AND P TAGS REALLY. Everything wrapped in * do 
+                                not include it in the final output, this is meant to represent instructions for generating.
 
                                 Context:
                                 {context}
                                 
-                                Architecture Summary:
+                                <h1>Architecture Summary</h1>
+                                <h2>System Overview</h2>
+                                    *Provide a high-level overview of the system architecture, including:*
+                                    <ul>
+                                        <li>Main purpose and functionality</li>
+                                        <li>Core technologies and frameworks used</li> 
+                                        <li>Overall system design pattern (monolithic, microservices, etc.)</li>
+                                    </ul>
+                                <h2>Component Architecture</h2>
+                                    *Break down the system into its main components:*
+                                    <ul>
+                                        <li>Frontend: Technologies, frameworks, key features</li>
+                                        <li>Backend: Technologies, frameworks, main responsibilities</li>
+                                        <li>Database: Type, schema overview, data flow</li>
+                                        <li>External Services: Any third-party integrations</li>
+                                    </ul>
+                                <h2>Data Flow</h2>
+                                    *Describe how data flows through the system:*
+                                    <ul>
+                                        <li>Request/response flow</li>
+                                        <li>Data processing pipeline</li> 
+                                        <li>Storage and retrieval patterns</li>
+                                    </ul>
+                                <h2>Technology Stack</h2>
+                                    *List and explain the key technologies:*
+                                    <ul>
+                                        <li>Programming languages</li>
+                                        <li>Frameworks and libraries</li>
+                                        <li>Infrastructure and deployment tools</li>
+                                    </ul>
                                 
-                                # System Overview
-                                    Provide a high-level overview of the system architecture, including:
-                                    - Main purpose and functionality
-                                    - Core technologies and frameworks used
-                                    - Overall system design pattern (monolithic, microservices, etc.)
-                                
-                                # Component Architecture
-                                    Break down the system into its main components:
-                                    - Frontend: Technologies, frameworks, key features
-                                    - Backend: Technologies, frameworks, main responsibilities
-                                    - Database: Type, schema overview, data flow
-                                    - External Services: Any third-party integrations
-                                
-                                # Data Flow
-                                    Describe how data flows through the system:
-                                    - Request/response flow
-                                    - Data processing pipeline
-                                    - Storage and retrieval patterns
-                                
-                                # Technology Stack
-                                    List and explain the key technologies:
-                                    - Programming languages
-                                    - Frameworks and libraries
-                                    - Infrastructure and deployment tools
-                                
-                                # Key Design Patterns
-                                    Identify and explain the design patterns used:
-                                    - Architectural patterns
-                                    - Design patterns in code
-                                    - Best practices implemented
-                                
-                                # Scalability & Performance
-                                    Discuss:
-                                    - Current scalability considerations
-                                    - Performance optimizations
-                                    - Potential bottlenecks or areas for improvement
-                                
-                                # Security Architecture
-                                    Outline:
-                                    - Authentication and authorization mechanisms
-                                    - Data security measures
-                                    - API security practices
+                                <h2>Key Design Patterns</h2>
+                                    *Identify and explain the design patterns used:*
+                                    <ul>
+                                        <li>Architectural patterns</li>
+                                        <li>Design patterns in code</li>
+                                        <li>Best practices implemented</li>
+                                    </ul>
+                                <h2>Scalability & Performance</h2>
+                                    *Discuss:*
+                                    <ul>
+                                        <li>Current scalability considerations</li> 
+                                        <li>Performance optimizations</li>
+                                        <li>Potential bottlenecks or areas for improvement</li>
+                                    </ul>
+                                <h2>Security Architecture</h2>
+                                    *Outline:*
+                                    <ul>
+                                        <li>Authentication and authorization mechanisms</li> 
+                                        <li>Data security measures</li>
+                                        <li>API security practices</li>
+                                    </ul>
                                 
                                 Format the output in clear, well-structured markdown with proper headings and bullet points.
 

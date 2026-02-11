@@ -7,13 +7,18 @@ type NavbarProps = {
     setLoginStatus: Function;
     user: string;
     setUser: Function;
+    getRepos: Function;
   };
 
-export default function Navbar({loginStatus, setLoginStatus, user} : NavbarProps){
+export default function Navbar({loginStatus, setLoginStatus, user, getRepos} : NavbarProps){
 
     function handleLogout(){
         logout();
         setLoginStatus(false);
+    }
+
+    function handleGetRepos(){
+        getRepos();
     }
 
 
@@ -28,6 +33,7 @@ export default function Navbar({loginStatus, setLoginStatus, user} : NavbarProps
                 <ul id="user-links">
                     <li id="user">Hello {user}</li>
                     <li id="logout" onClick={handleLogout}><a href="">Logout</a></li>
+                    <Link to='/repos'><li id="repos" onClick={handleGetRepos}>Repos</li></Link>
                 </ul>
                 }
             </div>

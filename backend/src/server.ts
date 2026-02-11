@@ -3,11 +3,9 @@ import type {Express,Request,Response} from "express";
 import { githubRouter } from "./routes/githubRouter.js";
 import { authRouter } from "./routes/authRoutes.js";
 import { llmRouter } from "./routes/llmRoutes.js";
+import { userDataRouter } from "./routes/userDataRouter.js";
 import cors from 'cors'
-import diagramController from "./controllers/diagramController.js";
-import onboardingController from "./controllers/onboardingController.js";
-import architectureSummaryController from "./controllers/architectureSummaryController.js";
-import apiDocsController from "./controllers/apiDocsController.js";
+
  
 const app : Express = express();
 const PORT : number = 8000;
@@ -20,11 +18,7 @@ app.use(cors({
 app.use(express.json());
 app.use('/download-repo', githubRouter, llmRouter);
 app.use('/', authRouter)
-// diagramController();
-// onboardingController();
-// architectureSummaryController();
-// apiDocsController();
-// app.use('/download-repo', llmRouter)
+app.use('/', userDataRouter)
 
 app.use((req:Request, res:Response):void => {
   res.status(404).json({ message: "Endpoint not found" });
