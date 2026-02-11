@@ -215,11 +215,10 @@ export const downloadController = (req: Request, res: Response, next: NextFuncti
         userId,
       });
 
-      // return res.status(200).json({
-      //   message: `Downloaded + indexed ${repoName}`,
-      //   repo_id: repoId,
-      //   chunks: docs.length,
-      // });
+      // Pass repoId and userId to the next handler (llmRouter)
+      res.locals.repoId = repoId;
+      res.locals.userId = userId ?? null;
+
       next();
     } catch (e: any) {
       // return res.status(500).json({ message: e?.message ?? "Indexing failed" });
