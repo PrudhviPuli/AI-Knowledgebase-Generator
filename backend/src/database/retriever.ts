@@ -13,11 +13,11 @@ const openAIApiKey = process.env.OPEN_API_KEY;
 const embeddings = new OpenAIEmbeddings({ openAIApiKey })
 const client = supabase;
 
-const vectorStore = new SupabaseVectorStore(embeddings, {
+export const vectorStore = new SupabaseVectorStore(embeddings, {
     client,
     tableName: 'documents',
     queryName: 'match_documents'
 
 })
 
-export const retriever = vectorStore.asRetriever();
+// export const retriever = vectorStore.asRetriever();

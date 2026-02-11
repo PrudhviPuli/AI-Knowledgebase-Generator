@@ -14,7 +14,7 @@ export default function RepoUpload(){
         const response = await ApiRepo(event);
         setData(`<div className="data">` + response.summary + response.onboarding + response.apidocs + "</div>")
         const diagram_response = await ApiDiagram();
-        setImageData(diagram_response.diagram)
+        // setImageData(diagram_response.diagram)
     }
 
     //<img src={`data:image/png;base64,${data}`} THIS IS HOW WE SHOWCASE IMAGE

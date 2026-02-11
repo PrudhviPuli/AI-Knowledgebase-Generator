@@ -3,7 +3,8 @@ import { PromptTemplate } from "@langchain/core/prompts";
 import dotenv from 'dotenv'
 import path from 'path'
 import { fileURLToPath } from "url";
-import { retriever } from "../database/retriever.js";
+// import { retriever } from "../database/retriever.js";
+import { BaseRetriever } from "@langchain/core/retrievers";
 import { RunnableSequence } from "@langchain/core/runnables";
 import { StringOutputParser } from "@langchain/core/output_parsers";
 
@@ -11,7 +12,7 @@ const __filename:string = fileURLToPath(import.meta.url)
 const __dirname:string = path.dirname(__filename)
 dotenv.config({path: path.resolve(__dirname, '../../.env')});
 
-export default async function architectureSummaryController(){
+export default async function architectureSummaryController(retriever: BaseRetriever){
     const openAIApiKey = process.env.OPENAI_API_KEY;
 
     const llm = new ChatOpenAI({ openAIApiKey });
