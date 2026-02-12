@@ -12,7 +12,11 @@ export default function RepoUpload(){
 
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>){
         const response = await ApiRepo(event);
-        setData(`<div className="data">` + response.summary + response.onboarding + response.apidocs + "</div>")
+        if (response.error) {
+            setData(`<p>Something went wrong. Please try again.</p>`)
+            return;
+        }
+        setData(`<div class="data">` + (response.summary ?? "") + (response.onboarding ?? "") + (response.apidocs ?? "") + "</div>")
         const diagram_response = await ApiDiagram();
         // setImageData(diagram_response.diagram)
     }
