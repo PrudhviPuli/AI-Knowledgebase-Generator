@@ -60,20 +60,20 @@ llmRouter.get('/', async (req: Request, res: Response) => {
 
 })
 
-llmRouter.get('/diagram', async (req: Request, res: Response) => {
-    const repoID = res.locals.repoID;
+// llmRouter.get('/diagram', async (req: Request, res: Response) => {
+//     const repoID = res.locals.repoID;
 
-    const retriever = vectorStore.asRetriever({
-        filter: {
-            repo_id: repoID
-        }
-    })
+//     const retriever = vectorStore.asRetriever({
+//         filter: {
+//             repo_id: repoID
+//         }
+//     })
 
-    try{
-        const diagram = await diagramController(retriever);
-        res.status(200).json(diagram)
-    }
-    catch(err){
-        res.status(500).json({error: err})
-    }
-}) 
+//     try{
+//         const diagram = await diagramController(retriever);
+//         res.status(200).json(diagram)
+//     }
+//     catch(err){
+//         res.status(500).json({error: err})
+//     }
+// }) 
