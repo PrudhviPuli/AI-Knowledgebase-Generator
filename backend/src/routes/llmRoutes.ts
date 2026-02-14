@@ -28,6 +28,7 @@ llmRouter.get('/', async (req: Request, res: Response) => {
 
         const repoId = res.locals.repoId as string;
         const userId = res.locals.userId as string | null;
+        const repoName = res.locals.repoName as string | null;
 
         // Upsert generated docs to the generated_docs table
         const { error } = await supabase
@@ -35,6 +36,7 @@ llmRouter.get('/', async (req: Request, res: Response) => {
             .upsert({
                 user_id: userId,
                 repo_id: repoId,
+                repo_name: repoName,
                 summary: summary.summary,
                 onboarding: onboarding.onboarding,
                 apidocs: apidocs.apidocs,
