@@ -129,8 +129,9 @@ async function upsertToSupabase(params: {
   openAIApiKey: string;
   tableName: string;
   userId?: string;
+  repoName?: string;
 }) {
-  const { docs, supabaseUrl, supabaseKey, openAIApiKey, tableName, userId } = params;
+  const { docs, supabaseUrl, supabaseKey, openAIApiKey, tableName, userId, repoName } = params;
 
   const client = createClient(supabaseUrl, supabaseKey);
   const embeddings = new OpenAIEmbeddings({ openAIApiKey });
@@ -160,6 +161,7 @@ async function upsertToSupabase(params: {
         metadata: d.metadata,
         embedding: vectors[idx],
         user_id: userId ?? null,
+        repo_name: repoName ?? null,
       };
     });
 
@@ -214,11 +216,13 @@ export const downloadController = (req: Request, res: Response, next: NextFuncti
         openAIApiKey,
         tableName: "documents",
         userId,
+        repoName,
       });
 
-      // Pass repoId and userId to the next handler (llmRouter)
+      // Pass repoId, userId, and repoName to the next handler (llmRouter)
       res.locals.repoId = repoId;
       res.locals.userId = userId ?? null;
+      res.locals.repoName = repoName;
 
       next();
     } catch (e: any) {
