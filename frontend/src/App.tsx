@@ -13,7 +13,7 @@ function App() {
 
   const [loginStatus, setLoginStatus] = useState<boolean>(false);
   const [user, setUser] = useState<string>("")
-  const [repos, setRepos] = useState<Object>({});
+  const [repos, setRepos] = useState<string[]>([]);
 
   //checks if logged in and keeps user logged in
   useEffect( () => {
@@ -33,7 +33,7 @@ function App() {
 
   async function handleGetRepos(){
     const res = await ApiGetRepos();
-    setRepos(res);
+    setRepos(res.names);
   }
 
   return (

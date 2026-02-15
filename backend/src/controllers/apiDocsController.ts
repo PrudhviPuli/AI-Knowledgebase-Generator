@@ -101,8 +101,8 @@ Follow this EXACT structure:
     // The API documentation
     const response = await chain.invoke(`Please generate me comprehensive API documentation for the codebase`);
 
-    console.log("API Docs Controller Here")
-    console.log("API Docs Response:", response)
+    // console.log("API Docs Controller Here")
+    // console.log("API Docs Response:", response)
 
     return {apidocs: response}
 }

@@ -26,7 +26,7 @@ export default async function ApiGetRepos(){
     
     //awaiting the AI Knowledgebase here
     const result = await response.json()
-    console.log(result)
+    // console.log(result)
     return result;
     
 }

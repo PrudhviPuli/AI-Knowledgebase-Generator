@@ -100,8 +100,8 @@ export default async function architectureSummaryController(retriever: BaseRetri
     // The architecture summary
     const response = await chain.invoke(`Please generate me a comprehensive architecture summary for the codebase`);
 
-    console.log("Architechture Summary Controller Here")
-    console.log("Architecture Summary Response:", response)
+    // console.log("Architechture Summary Controller Here")
+    // console.log("Architecture Summary Response:", response)
     
     // res.status(200).json({architectureSummary: response});
     return {summary: response};

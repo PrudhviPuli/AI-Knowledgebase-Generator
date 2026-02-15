@@ -92,7 +92,7 @@ export default async function diagramController(retriever: BaseRetriever){
             throw new Error("Image base64 data missing");
         }
 
-        console.log("Diagram Controller Here")
+        // console.log("Diagram Controller Here")
 
         return {diagram: image_base64};
     }

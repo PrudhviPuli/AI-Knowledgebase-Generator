@@ -1,0 +1,52 @@
+ul{
+    list-style: none;
+    display: flex;
+    gap: 30px;
+    margin-top: 80px;
+}
+
+.repos > li{
+    border: solid white 2px;
+    width: 300px;
+    display: flex;
+    justify-content: center;
+    height: 150px;
+    align-items: center;
+    border-radius: 10px;
+
+    position: relative;
+    overflow: hidden;
+}
+
+.repo-content{
+    transition: blur(4px);
+}
+
+.repos > li:hover .repo-content {
+    filter: blur(4px);
+    }
+
+.repos >li:hover{
+    background: rgba(0,0,0,0.75);
+    transform: scale(1.03);
+}
+
+.repos > li:hover .repo-button {
+    opacity: 1;
+    }
+
+.repo-button{
+    position: absolute;
+    opacity: 0;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+h2{
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+}

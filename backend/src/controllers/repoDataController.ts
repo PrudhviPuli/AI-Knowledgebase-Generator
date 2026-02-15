@@ -3,24 +3,28 @@ import supabase from '../database/supabase-client.js'
 
 export default async function repoData(req: Request, res: Response){
 
-    // const {data, error} = await supabase
-    //     .from("repos")
-    //     .select("*")
-    //     .eq("user_id", somethinghere)
+    const user_id = req.user?.user_id;
 
-    // if (error){
-    //     console.log("Error fetching repos data", error)
-    // }
+    const {data, error} = await supabase
+        .from("generated_docs")
+        .select("repo_name")
+        .eq("user_id", user_id)
+
+    if (error){
+        console.error("Error fetching repos data", error);
+        return res.status(500).json({error: "Failed to fetch repos"})
+    }
 
     // try{
-    //     // console.log(req.body)
-    //     res.status(200).json({message: "Successfully got the request"})
+    //     console.log(data)
+    //     res.status(200).json({names: data})
     // }
     // catch(e){
     //     console.error("Error in controller", e);
     //     res.status(500).json({error: "Internal server error"})
     // }
+    const repo_names = data.map( (object) => object.repo_name)
 
-    res.status(200).json({message: "Successfully reached RepoData"})
+    return res.status(200).json({names: repo_names})
     
 }

@@ -64,8 +64,8 @@ export default async function onboardingController(retriever: BaseRetriever){
     //The onboarding guide
     const response = await chain.invoke(`Please generate me an onboarding guide for the codebase`);
 
-    console.log("Onboarding Controller Here")
-    console.log("Onboarding Response:", response)
+    // console.log("Onboarding Controller Here")
+    // console.log("Onboarding Response:", response)
 
     // res.status(200).json({onboarding: response})
     return {onboarding: response};
