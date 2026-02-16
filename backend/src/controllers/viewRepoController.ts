@@ -1,22 +1,27 @@
 import {Request, Response} from 'express'
 import supabase from '../database/supabase-client.js'
 
-export default async function repoData(req: Request, res: Response){
+export default async function viewRepo(req: Request, res: Response){
 
     const user_id = req.user?.user_id;
+    const repo_name = req.query.repo_name
 
     const {data, error} = await supabase
         .from("generated_docs")
-        .select("repo_name")
+        .select("summary, onboarding, apidocs")
         .eq("user_id", user_id)
+        .eq("repo_name", repo_name)
 
     if (error){
         console.error("Error fetching repos data", error);
         return res.status(500).json({error: "Failed to fetch repos"})
     }
 
-    const repo_names = data.map( (object) => object.repo_name)
+    // console.log(data);
 
-    return res.status(200).json({names: repo_names})
+    const repo_data = data.map( (object) => Object.values(object)).join("")
+    // console.log(repo_data)
+
+    return res.status(200).json({data: repo_data})
     
 }

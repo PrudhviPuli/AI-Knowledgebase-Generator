@@ -7,6 +7,7 @@ import './css/App.css'
 import {HashRouter as Router, Routes, Route} from 'react-router-dom'
 import isLoggedIn from './endpoints/apiLoggedin'
 import ApiGetRepos from './endpoints/apiGetRepos'
+import ApiViewRepo from './endpoints/apiViewRepo'
 import { useState, useEffect } from 'react'
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
   const [loginStatus, setLoginStatus] = useState<boolean>(false);
   const [user, setUser] = useState<string>("")
   const [repos, setRepos] = useState<string[]>([]);
+  const [data, setData] = useState<string>("");
 
   //checks if logged in and keeps user logged in
   useEffect( () => {
@@ -36,6 +38,11 @@ function App() {
     setRepos(res.names);
   }
 
+  async function handleViewRepo(name: string){
+    const res = await ApiViewRepo(name);
+    setData(res.data);
+  }
+
   return (
     <>
       <Routes>
@@ -49,7 +56,7 @@ function App() {
           <Route path='/' element={<FrontPage />} />
           <Route path='/signup' element={<Signup />}/>
           <Route path='/login' element={<Login setLoginStatus={setLoginStatus} setUser={setUser}/>}/>
-          <Route path='/repos' element={<Repos data={repos} />}/>
+          <Route path='/repos' element={<Repos data={repos} viewRepo={handleViewRepo} repoData={data}/>}/>
         </Route>
       </Routes>
     </>
