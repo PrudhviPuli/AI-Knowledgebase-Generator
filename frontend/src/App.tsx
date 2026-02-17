@@ -16,6 +16,7 @@ function App() {
   const [user, setUser] = useState<string>("")
   const [repos, setRepos] = useState<string[]>([]);
   const [data, setData] = useState<string>("");
+  const [imageData, setImageData] = useState<string>("")
 
   //checks if logged in and keeps user logged in
   useEffect( () => {
@@ -41,6 +42,7 @@ function App() {
   async function handleViewRepo(name: string){
     const res = await ApiViewRepo(name);
     setData(res.data);
+    setImageData(res.image)
   }
 
   return (
@@ -56,7 +58,7 @@ function App() {
           <Route path='/' element={<FrontPage />} />
           <Route path='/signup' element={<Signup />}/>
           <Route path='/login' element={<Login setLoginStatus={setLoginStatus} setUser={setUser}/>}/>
-          <Route path='/repos' element={<Repos data={repos} viewRepo={handleViewRepo} repoData={data}/>}/>
+          <Route path='/repos' element={<Repos data={repos} viewRepo={handleViewRepo} repoData={data} image={imageData}/>}/>
         </Route>
       </Routes>
     </>

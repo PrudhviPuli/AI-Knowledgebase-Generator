@@ -8,7 +8,7 @@ export default async function viewRepo(req: Request, res: Response){
 
     const {data, error} = await supabase
         .from("generated_docs")
-        .select("summary, onboarding, apidocs")
+        .select("summary, onboarding, apidocs, diagram")
         .eq("user_id", user_id)
         .eq("repo_name", repo_name)
 
@@ -17,11 +17,10 @@ export default async function viewRepo(req: Request, res: Response){
         return res.status(500).json({error: "Failed to fetch repos"})
     }
 
-    // console.log(data);
+    // console.log(data[0].diagram);
+    const {summary, onboarding, apidocs, diagram} = data[0];
+    const repo_data = data.map( (object) => Object.values(object))
 
-    const repo_data = data.map( (object) => Object.values(object)).join("")
-    // console.log(repo_data)
-
-    return res.status(200).json({data: repo_data})
+    return res.status(200).json({data: summary + onboarding + apidocs, image: diagram})
     
 }

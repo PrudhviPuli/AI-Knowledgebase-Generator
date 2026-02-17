@@ -70,7 +70,7 @@ export default async function diagramController(retriever: BaseRetriever){
 
     const prompt = await chain.invoke(`Please generate me an architechture diagram for the codebase`);
 
-    console.log("GOT PAST MAIN LANGCHAIN PROMPT")
+    // console.log("GOT PAST MAIN LANGCHAIN PROMPT")
 
     // console.log(typeof prompt)
 

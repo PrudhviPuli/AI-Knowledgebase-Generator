@@ -36,7 +36,21 @@ ul{
     margin-bottom: 0;
 }
 
+.diagram-container{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    width: 70%;
+    margin: 30px auto 0 auto;
+}
+
 #diagram{
     width: 600px;
     height: 400px;
+    margin-bottom: 30px;
+}
+
+#diagram-heading{
+    /* margin-left: 200px; */
+    margin-bottom: 30px;
 }

@@ -5,9 +5,11 @@ type ReposProps = {
     data: string[];
     viewRepo: (repoName: string) => void;
     repoData: string;
+    image: string;
   };
 
-export default function Repos({data, viewRepo, repoData} : ReposProps){
+export default function Repos({data, viewRepo, repoData, image} : ReposProps){
+
     const repo_names = data.map((names, index) => {
         return(
             <li key={index}>
@@ -27,6 +29,12 @@ export default function Repos({data, viewRepo, repoData} : ReposProps){
         <div className="seperator"><h2>View Repo</h2></div>
         <div className="data">{parse(repoData)}</div>
         </> 
+        }
+        { image && image !== "undefined" &&
+            <div className="diagram-container">
+                <h2 id="diagram-heading">Architechture Diagram</h2>
+                <img src={`data:image/png;base64,${image}`} id="diagram" className="data"/>
+            </div> 
         }
         </>
     )
