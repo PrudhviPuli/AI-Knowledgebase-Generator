@@ -7,7 +7,7 @@ export default async function ApiRepo(event: React.FormEvent<HTMLFormElement>){
     const formData: FormData = new FormData(event.currentTarget)
     const {repolink} = Object.fromEntries(formData.entries()) as {repolink: string}
 
-    const url = new URL("http://localhost:8000/download-repo");
+    const url = new URL("https://ai-pdf-knowledge-assistant.onrender.com/download-repo");
     url.searchParams.append("repolink", repolink);
 
     //sending over the repo link

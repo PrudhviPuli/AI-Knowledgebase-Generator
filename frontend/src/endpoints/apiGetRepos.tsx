@@ -3,7 +3,7 @@ import getToken from "../utils/auth";
 export default async function ApiGetRepos(){
 
 
-    const response = await fetch("http://localhost:8000/get-repos", {
+    const response = await fetch("https://ai-pdf-knowledge-assistant.onrender.com/get-repos", {
         method: "GET",
         headers: {'Authorization': `Bearer ${getToken()}` || ""}, //authentication
         credentials: 'include',

@@ -15,7 +15,7 @@ export default async function ApiSignup(event: React.FormEvent<HTMLFormElement>,
       }
     
       try {
-        const response = await fetch('http://localhost:8000/signup', {
+        const response = await fetch('https://ai-pdf-knowledge-assistant.onrender.com/signup', {
           method: 'POST',
           headers: {
             "Content-Type": "application/json"

@@ -11,7 +11,7 @@ export default async function ApiLogin(event: React.FormEvent<HTMLFormElement>, 
     const {email, password} = Object.fromEntries(formData.entries())
 
     try {
-    const response = await fetch('http://localhost:8000/login', {
+    const response = await fetch('https://ai-pdf-knowledge-assistant.onrender.com/login', {
         method: 'POST',
         headers: {
         "Content-Type": "application/json"

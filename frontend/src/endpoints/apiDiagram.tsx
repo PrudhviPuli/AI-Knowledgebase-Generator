@@ -3,7 +3,7 @@ import getToken from "../utils/auth";
 export default async function ApiDiagram(){
 
 
-    const response = await fetch("http://localhost:8000/download-repo/diagram", {
+    const response = await fetch("https://ai-pdf-knowledge-assistant.onrender.com/diagram", {
         method: "GET",
         headers: {'Authorization': `Bearer ${getToken()}` || ""}, //authentication
         credentials: 'include',

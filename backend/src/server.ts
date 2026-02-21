@@ -11,7 +11,7 @@ const app : Express = express();
 const PORT : number = 8000;
 
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: 'https://ai-knowledgebase-generator-navy.vercel.app',
   credentials:true,
 }))
 

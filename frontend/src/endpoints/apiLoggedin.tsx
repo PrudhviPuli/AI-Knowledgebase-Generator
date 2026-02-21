@@ -9,7 +9,7 @@ export default async function isLoggedIn(){
         // No token → definitely not logged in (skip request)
         if (!token) return false;
 
-        const response = await fetch('http://localhost:8000/me', {
+        const response = await fetch('https://ai-pdf-knowledge-assistant.onrender.com/me', {
             headers: {'Authorization': `Bearer ${token}` || ""},
             credentials: 'include'
         })
