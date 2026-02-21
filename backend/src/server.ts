@@ -8,7 +8,7 @@ import cors from 'cors'
 
  
 const app : Express = express();
-// const PORT : number = 8000;
+const PORT : number = 8000;
 
 app.use(cors({
   origin: 'https://ai-knowledgebase-generator-navy.vercel.app',
@@ -24,4 +24,4 @@ app.use((req:Request, res:Response):void => {
   res.status(404).json({ message: "Endpoint not found" });
 });
 
-// app.listen(PORT, () : void => console.log(`Server running on http://localhost:${PORT}`));
+app.listen(PORT, () : void => console.log(`Server running on http://localhost:${PORT}`));
